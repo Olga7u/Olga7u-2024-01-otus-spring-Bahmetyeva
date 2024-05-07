@@ -19,7 +19,7 @@ public class TestServiceImpl implements TestService {
     @Override
     public TestResult executeTestFor(Student student) {
         ioService.printLine("");
-        ioService.printLineLocalized("TestService.answer.the.questions");
+        ioService.printLineLocalized("answer.the.questions");
         ioService.printLine("");
 
         var questions = questionDao.findAll();

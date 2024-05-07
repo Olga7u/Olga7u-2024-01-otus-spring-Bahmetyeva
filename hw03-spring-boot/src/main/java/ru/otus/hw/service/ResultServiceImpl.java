@@ -16,18 +16,18 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public void showResult(TestResult testResult) {
         ioService.printLine("");
-        ioService.printLineLocalized("ResultService.test.results");
-        ioService.printFormattedLineLocalized("ResultService.student",
+        ioService.printLineLocalized("test.results");
+        ioService.printFormattedLineLocalized("student",
                 testResult.getStudent().getFullName());
-        ioService.printFormattedLineLocalized("ResultService.answered.questions.count",
+        ioService.printFormattedLineLocalized("answered.questions.count",
                 testResult.getAnsweredQuestions().size());
-        ioService.printFormattedLineLocalized("ResultService.right.answers.count",
+        ioService.printFormattedLineLocalized("right.answers.count",
                 testResult.getRightAnswersCount());
 
         if (testResult.getRightAnswersCount() >= testConfig.getRightAnswersCountToPass()) {
-            ioService.printLineLocalized("ResultService.passed.test");
+            ioService.printLineLocalized("passed.test");
             return;
         }
-        ioService.printLineLocalized("ResultService.fail.test");
+        ioService.printLineLocalized("fail.test");
     }
 }
