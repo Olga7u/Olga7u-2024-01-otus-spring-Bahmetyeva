@@ -3,11 +3,10 @@ package ru.otus.hw.commands;
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import ru.otus.hw.converters.BookConverter;
 import ru.otus.hw.services.BookService;
 
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @SuppressWarnings({"SpellCheckingInspection", "unused"})
 @RequiredArgsConstructor
@@ -16,39 +15,43 @@ public class BookCommands {
 
     private final BookService bookService;
 
-    private final BookConverter bookConverter;
-
     @ShellMethod(value = "Find all books", key = "ab")
     public String findAllBooks() {
-        return bookService.findAll().stream()
-                .map(bookConverter::bookToString)
-                .collect(Collectors.joining("," + System.lineSeparator()));
+        return bookService.findAll();
     }
 
     @ShellMethod(value = "Find book by id", key = "bbid")
     public String findBookById(long id) {
-        return bookService.findById(id)
-                .map(bookConverter::onlyBookToString)
-                .orElse("Book with id %d not found".formatted(id));
+        return bookService.findById(id);
     }
 
     // bins newBook 1 1,6
     @ShellMethod(value = "Insert book", key = "bins")
     public String insertBook(String title, long authorId, Set<Long> genresIds) {
-        var savedBook = bookService.insert(title, authorId, genresIds);
-        return bookConverter.bookToString(savedBook);
+        return bookService.insert(title, authorId, genresIds);
     }
 
     // bupd 4 editedBook 3 2,5
     @ShellMethod(value = "Update book", key = "bupd")
-    public String updateBook(long id, String title, long authorId, Set<Long> genresIds) {
-        var savedBook = bookService.update(id, title, authorId, genresIds);
-        return bookConverter.bookToString(savedBook);
+    public String updateBook(long id, String title, long authorId, Set<Long> genresIds, List<String> commentTexts) {
+        return bookService.update(id, title, authorId, genresIds, commentTexts);
     }
 
     // bdel 4
     @ShellMethod(value = "Delete book by id", key = "bdel")
     public void deleteBook(long id) {
         bookService.deleteById(id);
+    }
+
+    // cins 1, bla
+    @ShellMethod(value = "Insert comment on book", key = "cins")
+    public String insertComment(long bookId, String text) {
+        return bookService.insertComment(bookId, text);
+    }
+
+    // bc 1
+    @ShellMethod(value = "Find comments by book_id", key = "bc")
+    public String findCommentsByBookId(long bookId) {
+        return bookService.findComments(bookId);
     }
 }

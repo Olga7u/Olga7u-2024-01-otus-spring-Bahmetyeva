@@ -4,19 +4,15 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "books")
-@NamedEntityGraph(name = "book-graph",
-        attributeNodes = {
-                @NamedAttributeNode("genres")})
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,13 +21,16 @@ public class Book {
     @Column(name = "title", nullable = false, unique = true)
     private String title;
 
-    @ManyToOne(targetEntity = Author.class, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(targetEntity = Author.class, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "author_id")
     private Author author;
 
-    @Fetch(FetchMode.SUBSELECT)
     @ManyToMany(targetEntity = Genre.class, fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "books_genres", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id"))
-    private List<Genre> genres;
+    private Set<Genre> genres;
+
+    @OneToMany(targetEntity = Comment.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "book_id")
+    private List<Comment> comments;
 }

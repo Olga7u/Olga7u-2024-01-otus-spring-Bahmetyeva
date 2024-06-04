@@ -15,10 +15,9 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(targetEntity = Book.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
-    private Book book;
-
     @Column(name = "text", nullable = false)
     private String text;
+
+    //@Column(name = "book_id")
+    //private long bookId;
 }

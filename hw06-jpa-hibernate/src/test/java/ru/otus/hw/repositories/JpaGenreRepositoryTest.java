@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.hw.models.Genre;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -42,8 +43,8 @@ class JpaGenreRepositoryTest {
     @DisplayName("список жанров по заданным идентификаторам")
     @Test
     void findAllByIds() {
-        List<Genre> expected = dbGenres.subList(1, 4);
-        List<Genre> actual = jpaGenreRepository.findAllByIds(Set.of(2L, 3L, 4L));
+        Set<Genre> expected = new HashSet<>(dbGenres.subList(1, 4));
+        Set<Genre> actual = jpaGenreRepository.findAllByIds(Set.of(2L, 3L, 4L));
 
         assertThat(actual).containsExactlyElementsOf(expected);
         actual.forEach(System.out::println);
