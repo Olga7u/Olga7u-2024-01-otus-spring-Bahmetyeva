@@ -34,7 +34,7 @@ public class BookServiceImpl implements BookService {
 
     private final CommentConverter commentConverter;
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public String findById(long id) {
         Optional<Book> book = bookRepository.findById(id);
@@ -42,7 +42,7 @@ public class BookServiceImpl implements BookService {
                 .orElse("Book with id %d not found".formatted(id));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public String findAll() {
         List<Book> books = bookRepository.findAll();
@@ -78,7 +78,7 @@ public class BookServiceImpl implements BookService {
         return bookConverter.bookToString(book);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public String findComments(long bookId) {
         List<Comment> comments = bookRepository.findByBookId(bookId);
