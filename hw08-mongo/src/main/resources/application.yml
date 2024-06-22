@@ -1,0 +1,24 @@
+spring:
+  data:
+    mongodb:
+      port: 27017
+      database: LibraryDb
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 4.2.3
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.hw.mongock
+  mongo-db:
+    write-concern:
+      journal: false
+    read-concern: local
+
+logging:
+  level:
+    ROOT: ERROR
