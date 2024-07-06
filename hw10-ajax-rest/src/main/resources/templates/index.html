@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Library</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { width: 500px; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+        .form-container { margin-top: 20px; }
+        .form-container input { margin-bottom: 10px; }
+        .row {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<h3>Books</h3>
+<table id="books">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Genres</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<div class="row">
+    <a href="/edit/0">New book</a>
+</div>
+
+<script>
+    const apiUrl = 'http://localhost:8080/books';
+
+    async function fetchBooks() {
+        const response = await fetch(apiUrl);
+        const books = await response.json();
+        const tbody = document.querySelector('#books tbody');
+        tbody.innerHTML = '';
+        books.forEach(book => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${book.id}</td>
+                <td>${book.title}</td>
+                <td>${book.author.fullName}</td>
+                <td>${book.genres.map(genre => genre.name).join(', ')}</td>
+                <td>
+                    <a href="edit/${book.id}">Edit</a>
+                </td>
+                <td>
+                    <button onclick="confirmDelete(${book.id})">Delete</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    async function deleteBook(id) {
+            await fetch(`${apiUrl}/${id}`, {
+                method: 'DELETE'
+            });
+            fetchBooks();
+        }
+
+    function confirmDelete(id) {
+            const confirmDelete = confirm("Are you sure you want to delete this book?");
+            if (confirmDelete) {
+                deleteBook(id);
+            }
+        }
+
+    fetchBooks();
+</script>
+</body>
+</html>
