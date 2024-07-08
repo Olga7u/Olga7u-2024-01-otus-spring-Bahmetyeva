@@ -98,9 +98,9 @@
 </form>
 
 <script>
-    const API_URL = 'http://localhost:8080/books';
-    const AUTHORS_URL = 'http://localhost:8080/authors';
-    const GENRES_URL = 'http://localhost:8080/genres';
+    const API_URL = '/api/books';
+    const AUTHORS_URL = '/api/authors';
+    const GENRES_URL = '/api/genres';
     const currentUrl = new URL(window.location.href);
     const bookId = currentUrl.pathname.split('/').pop();
 

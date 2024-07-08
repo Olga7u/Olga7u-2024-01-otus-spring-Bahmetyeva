@@ -22,9 +22,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import ru.otus.hw.services.AuthorService;
 import ru.otus.hw.services.BookService;
-import ru.otus.hw.services.GenreService;
 
 @WebMvcTest(BookController.class)
 class BookControllerTest {
@@ -38,11 +36,7 @@ class BookControllerTest {
     @MockBean
     private BookService bookService;
 
-    @MockBean
-    private AuthorService authorService;
-
-    @MockBean
-    private GenreService genreService;
+    private final String apiUrl = "/api/books";
 
     @Test
     void getAllBooks() throws Exception {
@@ -58,7 +52,7 @@ class BookControllerTest {
         List<BookDto> expectedResult = books.stream()
                 .toList();
 
-        mvc.perform(get("/books"))
+        mvc.perform(get(apiUrl))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(expectedResult)));
     }
@@ -69,7 +63,7 @@ class BookControllerTest {
                 Set.of(new Genre(1L, "Genre_1"), new Genre(2L, "Genre_2")));
         given(bookService.findBookById(1L)).willReturn(book);
 
-        mvc.perform(get("/books/1"))
+        mvc.perform(get(apiUrl + "/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(book)));
     }
@@ -81,7 +75,7 @@ class BookControllerTest {
         given(bookService.saveBook(any())).willReturn(book);
         String expectedResult = mapper.writeValueAsString(book);
 
-        mvc.perform(post("/books")
+        mvc.perform(post(apiUrl)
                         .contentType(APPLICATION_JSON)
                         .content(expectedResult))
                 .andExpect(status().isOk())
@@ -90,7 +84,7 @@ class BookControllerTest {
 
     @Test
     void deleteById() throws Exception {
-        mvc.perform(delete("/books/1"))
+        mvc.perform(delete(apiUrl + "/1"))
                 .andExpect(status().isOk());
         verify(bookService, times(1)).deleteById(1L);
     }

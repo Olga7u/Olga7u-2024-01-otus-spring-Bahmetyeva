@@ -1,43 +1,33 @@
 package ru.otus.hw.controllers;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.hw.models.Comment;
 import ru.otus.hw.services.CommentService;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
-public class CommentController {
+public class CommentController extends RootController {
 
     private final CommentService commentService;
 
-    @GetMapping(value = "/books/{bookId}/comments")
+    private final String apiUrl = "/api/books/{bookId}/comments";
+
+    @GetMapping(apiUrl)
     public List<Comment> getBookComments(@PathVariable("bookId") long bookId) {
         return commentService.getBookComments(bookId);
     }
 
-    @PostMapping("/books/{bookId}/comments")
+    @PostMapping(apiUrl)
     public String insertComment(@PathVariable("bookId") long bookId, @RequestBody String text) {
-        try {
-            commentService.insertComment(bookId, text);
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
-            throw ex;
-        }
+        commentService.insertComment(bookId, text);
         return "Ok";
     }
 
-    @DeleteMapping("/books/{bookId}/comments/{id}")
+    @DeleteMapping(apiUrl + "/{id}")
     public void deleteById(@PathVariable("id") long id) {
-        try {
-            commentService.deleteById(id);
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
-            throw ex;
-        }
+        commentService.deleteById(id);
     }
 }
