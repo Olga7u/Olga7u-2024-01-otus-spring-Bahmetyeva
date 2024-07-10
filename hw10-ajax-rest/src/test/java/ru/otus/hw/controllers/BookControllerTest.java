@@ -36,8 +36,6 @@ class BookControllerTest {
     @MockBean
     private BookService bookService;
 
-    private final String apiUrl = "/api/books";
-
     @Test
     void getAllBooks() throws Exception {
         List<BookDto> books = List.of(
@@ -52,7 +50,7 @@ class BookControllerTest {
         List<BookDto> expectedResult = books.stream()
                 .toList();
 
-        mvc.perform(get(apiUrl))
+        mvc.perform(get("/api/books"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(expectedResult)));
     }
@@ -63,7 +61,7 @@ class BookControllerTest {
                 Set.of(new Genre(1L, "Genre_1"), new Genre(2L, "Genre_2")));
         given(bookService.findBookById(1L)).willReturn(book);
 
-        mvc.perform(get(apiUrl + "/1"))
+        mvc.perform(get("/api/books/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(book)));
     }
@@ -75,7 +73,7 @@ class BookControllerTest {
         given(bookService.saveBook(any())).willReturn(book);
         String expectedResult = mapper.writeValueAsString(book);
 
-        mvc.perform(post(apiUrl)
+        mvc.perform(post("/api/books")
                         .contentType(APPLICATION_JSON)
                         .content(expectedResult))
                 .andExpect(status().isOk())
@@ -84,7 +82,7 @@ class BookControllerTest {
 
     @Test
     void deleteById() throws Exception {
-        mvc.perform(delete(apiUrl + "/1"))
+        mvc.perform(delete("/api/books/1"))
                 .andExpect(status().isOk());
         verify(bookService, times(1)).deleteById(1L);
     }

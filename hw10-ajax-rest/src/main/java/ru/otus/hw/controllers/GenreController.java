@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class GenreController extends RootController{
+public class GenreController {
 
     private final GenreService genreService;
 

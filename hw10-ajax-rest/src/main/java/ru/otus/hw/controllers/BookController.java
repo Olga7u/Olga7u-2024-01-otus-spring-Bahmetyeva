@@ -11,30 +11,28 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class BookController extends RootController {
+public class BookController {
 
     private final BookService bookService;
 
-    private final String apiUrl = "/api/books";
-
-    @GetMapping(apiUrl)
+    @GetMapping("/api/books")
     public List<BookDto> getAllBooks() {
         return bookService.findAllBooks();
     }
 
-    @GetMapping(apiUrl + "/{id}")
+    @GetMapping("/api/books/{id}")
     public ResponseEntity<BookDto> getBookById(@PathVariable("id") long id) {
         BookDto bookDto = bookService.findBookById(id);
         return ResponseEntity.ok(bookDto);
     }
 
-    @PostMapping(apiUrl)
+    @PostMapping("/api/books")
     public ResponseEntity<Book> saveBook(@RequestBody BookDto bookDto) {
         Book book = bookService.saveBook(bookDto);
         return ResponseEntity.ok(book);
     }
 
-    @DeleteMapping(apiUrl + "/{id}")
+    @DeleteMapping("/api/books/{id}")
     public void deleteById(@PathVariable("id") long id) {
         bookService.deleteById(id);
     }

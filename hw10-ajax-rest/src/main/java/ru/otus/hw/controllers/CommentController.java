@@ -9,24 +9,22 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class CommentController extends RootController {
+public class CommentController {
 
     private final CommentService commentService;
 
-    private final String apiUrl = "/api/books/{bookId}/comments";
-
-    @GetMapping(apiUrl)
+    @GetMapping("/api/books/{bookId}/comments")
     public List<Comment> getBookComments(@PathVariable("bookId") long bookId) {
         return commentService.getBookComments(bookId);
     }
 
-    @PostMapping(apiUrl)
+    @PostMapping("/api/books/{bookId}/comments")
     public String insertComment(@PathVariable("bookId") long bookId, @RequestBody String text) {
         commentService.insertComment(bookId, text);
         return "Ok";
     }
 
-    @DeleteMapping(apiUrl + "/{id}")
+    @DeleteMapping("/api/books/{bookId}/comments/{id}")
     public void deleteById(@PathVariable("id") long id) {
         commentService.deleteById(id);
     }

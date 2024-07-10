@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class AuthorController extends RootController{
+public class AuthorController {
 
     private final AuthorService authorService;
 

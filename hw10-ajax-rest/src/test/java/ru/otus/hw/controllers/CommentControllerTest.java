@@ -31,14 +31,12 @@ class CommentControllerTest {
     @MockBean
     private CommentService commentService;
 
-    private final String apiUrl = "/api/books/1/comments";
-
     @Test
     void getBookComments() throws Exception {
         List<Comment> commentList = List.of(new Comment(1, "bla"), new Comment(2, "bla-bla"));
         given(commentService.getBookComments(1L)).willReturn(commentList);
 
-        mvc.perform(get(apiUrl))
+        mvc.perform(get("/api/books/1/comments"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(commentList)));
     }
@@ -46,7 +44,7 @@ class CommentControllerTest {
     @Test
     void insertComment() throws Exception {
         String commentText = "Text";
-        mvc.perform(post(apiUrl)
+        mvc.perform(post("/api/books/1/comments")
                         .contentType(APPLICATION_JSON)
                         .content(commentText))
                 .andExpect(status().isOk())
@@ -56,7 +54,7 @@ class CommentControllerTest {
 
     @Test
     void deleteById() throws Exception {
-        mvc.perform(delete(apiUrl + "/1"))
+        mvc.perform(delete("/api/books/1/comments/1"))
                 .andExpect(status().isOk());
         verify(commentService, times(1)).deleteById(1L);
     }
